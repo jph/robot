@@ -1,21 +1,30 @@
+# The main Toy Robot class.
 class CoolRobot
+  # Accepted directions that the robot can face.
   DIRECTIONS = [:NORTH, :EAST, :WEST, :SOUTH]
+  # The instance's current position
   attr_accessor :position_x, :position_y
-  attr_accessor :position # => [x, y]
+  # Current direction.
   attr_accessor :direction
+  # Command history.
   attr_accessor :history
+  # If the robot is placed on the table or not.
   attr_accessor :placed
 
+  # Start up the robot and execute command sequence.
+  #
+  # * +table+: an instance of the Table class
+  # * +commands+: an array of commands for the robot to perform
   def initialize table, commands
     @table    = table
     @history  = []
-    @position = []
     @placed   = false
     @commands = commands
 
     execute_sequence
   end
 
+  # Sets the robot to face a new direction, if it is valid.
   def direction= direction
     if valid_direction?(direction)
       @direction = direction
@@ -24,10 +33,12 @@ class CoolRobot
     end
   end
 
+  # Checks for whether the supplied direction is valid.
   def valid_direction? direction
     DIRECTIONS.include? direction.to_sym
   end
 
+  # This method executes the sequence of commands provided to the new() method.
   def execute_sequence
     raise CoolRobotError, "Invalid sequence." if @commands.nil?
     @commands.each do |cmd|
@@ -59,10 +70,12 @@ class CoolRobot
     end
   end
 
+  # Returns our x and y co-ordinates as well as currently-facing direction.
   def report
     [@position_x, @position_y, @direction]
   end
 
+  # Checks that the next move is valid, and then moves there.
   def move
     if @table.within_bounds? *next_position
       @position_x = next_position[0]
@@ -72,6 +85,7 @@ class CoolRobot
     end
   end
 
+  # Turns the robot left.
   def turn_left
     @direction = case @direction
       when 'EAST' then 'NORTH'
@@ -81,6 +95,7 @@ class CoolRobot
     end
   end
 
+  # Turns the robot right.
   def turn_right
     @direction = case @direction
       when 'EAST' then 'SOUTH'
@@ -90,6 +105,7 @@ class CoolRobot
     end
   end
 
+  # Generates the next position based on the instance's current direction faced.
   def next_position
     next_pos = case @direction
       when 'NORTH' then [@position_x, @position_y + 1]
@@ -101,13 +117,16 @@ class CoolRobot
     next_pos
   end
 
+  # Outputs followed command history in a human-readable format.
   def display_history
     @history.join("\n")
   end
 
+  # Clears followed command history.
   def clear_history
     @history = []
   end
 end
 
+# Nicer exception class name.
 class CoolRobotError < StandardError; end
