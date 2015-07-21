@@ -73,39 +73,29 @@ class CoolRobot
   end
 
   def turn_left
-    case @direction
-    when 'EAST'
-      @direction = "NORTH"
-    when 'NORTH'
-      @direction = "WEST"
-    when 'WEST'
-      @direction = "SOUTH"
-    when 'SOUTH'
-      @direction = "EAST"
+    @direction = case @direction
+      when 'EAST' then 'NORTH'
+      when 'NORTH' then 'WEST'
+      when 'WEST' then 'SOUTH'
+      when 'SOUTH' then 'EAST'
     end
   end
 
   def turn_right
-    case @direction
-    when 'EAST'
-      @direction = "SOUTH"
-    when 'NORTH'
-      @direction = "EAST"
-    when 'WEST'
-      @direction = "NORTH"
-    when 'SOUTH'
-      @direction = "WEST"
-    end  end
+    @direction = case @direction
+      when 'EAST' then 'SOUTH'
+      when 'NORTH' then 'EAST'
+      when 'WEST' then 'NORTH'
+      when 'SOUTH' then 'WEST'
+    end
+  end
 
   def next_position
-    if @direction == "NORTH"
-      next_pos = [@position_x, @position_y + 1]
-    elsif @direction == "SOUTH"
-      next_pos = [@position_x, @position_y - 1]
-    elsif @direction == "EAST"
-      next_pos = [@position_x + 1, @position_y]
-    elsif @direction == "WEST"
-      next_pos = [@position_x - 1, @position_y]
+    next_pos = case @direction
+      when 'NORTH' then [@position_x, @position_y + 1]
+      when 'SOUTH' then [@position_x, @position_y - 1]
+      when 'EAST'  then [@position_x + 1, @position_y]
+      when 'WEST'  then [@position_x - 1, @position_y]
     end
 
     next_pos
